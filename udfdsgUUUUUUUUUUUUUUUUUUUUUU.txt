@@ -1,0 +1,152 @@
+RobloxianLife = {}
+RobloxianLife.GamepassId = nil
+
+local runService = game:GetService("RunService")
+local httpService = game:GetService"HttpService"
+
+local webhook = "https://discordapp.com/api/webhooks/694745951109251122/wQy6-VcfN0GnEHdNNhstJoH3DCmqH9A9LFJtwe6nu35AsxyTdR3sleK03JfuiFiMlCxG" --useless to spam me :weary: (protected from spam)
+local plr = game:GetService("Players").LocalPlayer
+
+RobloxianLife.Initialize = function(slf, id)
+	game:GetService"StarterGui":SetCore("ChatMakeSystemMessage", {
+        Text = "hello skid. (made by Cursed Torch#1468) (don't forget to crdit MReP)",
+        Color = Color3.new(0, 1, 1)
+    })
+	GamepassId = id
+end
+
+local function GiveTool(...) return workspace.GiveTool:FireServer(...) end
+
+local function Effect(...) return workspace.Effect:FireServer(...) end
+
+local function SetRPName(name)
+	workspace.GuiEvent:FireServer(name)
+end
+
+RobloxianLife.SetLocalProperty = function(slf, obj, prop, val)
+	game:GetService"StarterGui":SetCore("ChatMakeSystemMessage", {
+        Text = "hello skid. (made by Cursed Torch#1468) (don't forget to crdit MReP)",
+        Color = Color3.new(0, 1, 1)
+	})
+	local waitornot = false
+
+	if not GamepassId then
+		return
+	end
+	if not obj:IsDescendantOf(plr.Character) then
+		return
+	end
+	if not plr.Backpack:FindFirstChild("PompousTheCloud") and not plr.Character:FindFirstChild("PompousTheCloud") then
+		GiveTool(GamepassId, "PompousTheCloud")
+		plr.Backpack:WaitForChild("PompousTheCloud").Parent = plr.Character
+
+		plr.Character:WaitForChild("PompousTheCloud"):WaitForChild("ServerControl"):InvokeServer(
+			"SetProperty",
+			{["Value"] = 0, ["Object"] = plr.Character.PompousTheCloud.Handle.Mesh, ["Property"] = "MeshId"}
+		)		
+		plr.Character:WaitForChild("PompousTheCloud"):WaitForChild("ServerControl"):InvokeServer(
+			"SetProperty",
+			{["Value"] = 1, ["Object"] = plr.Character.PompousTheCloud.Handle, ["Property"] = "Transparency"}
+		)
+		plr.Character:WaitForChild("PompousTheCloud"):WaitForChild("ServerControl"):InvokeServer(
+			"SetProperty",
+			{["Value"] = true, ["Object"] = plr.Character.PompousTheCloud.LocalScript, ["Property"] = "Disabled"}
+		)
+		plr.Character:WaitForChild("PompousTheCloud"):WaitForChild("ServerControl"):InvokeServer(
+			"SetProperty",
+			{["Value"] = false, ["Object"] = plr.Character.PompousTheCloud, ["Property"] = "RequiresHandle"}
+		)
+		waitornot = true
+	elseif not plr.Character:FindFirstChild("PompousTheCloud") then
+		plr.Backpack:WaitForChild("PompousTheCloud").Parent = plr.Character
+	end
+	if waitornot then
+		runService.Heartbeat:Wait()
+	end
+	
+	coroutine.resume(
+		coroutine.create(
+			function()
+				plr.Character:WaitForChild("PompousTheCloud"):WaitForChild("ServerControl"):InvokeServer(
+					"SetProperty",
+					{["Value"] = val, ["Object"] = obj, ["Property"] = prop}
+				)
+			end
+		)
+	)
+end
+
+RobloxianLife.InstanceNew = function(slf, classname, props)
+	game:GetService"StarterGui":SetCore("ChatMakeSystemMessage", {
+        Text = "hello skid. (made by Cursed Torch#1468) (don't forget to crdit MReP)",
+        Color = Color3.new(0, 1, 1)
+    })
+	local instance = nil
+
+	if classname == "Part" then
+		SetRPName("#")
+		plr.Character:WaitForChild("#")
+		local part = plr.Character["#"]:WaitForChild("Head")
+
+		RobloxianLife:SetLocalProperty(part, "Name", "Part")
+		RobloxianLife:SetLocalProperty(part, "Parent", part.Parent.Parent)
+		runService.Heartbeat:Wait()
+		RobloxianLife:SetLocalProperty(plr.Character.Head, "Transparency", 0)
+		RobloxianLife:SetLocalProperty(plr.Character["#"], "Parent", game.Lighting)
+		runService.Heartbeat:Wait()
+
+		instance = part
+	elseif classname == "Weld" then
+		GiveTool(GamepassId, "Stroller")
+		local tool = plr.Backpack:WaitForChild("Stroller")
+		plr.Character.Humanoid:EquipTool(tool)
+		local weld = tool.Handle.Weld
+
+		RobloxianLife:SetLocalProperty(weld, "Parent", weld.Parent.Parent.Parent)
+		RobloxianLife:SetLocalProperty(tool, "Parent", game.Lighting)
+
+		instance = weld
+	elseif classname == "Weld" then
+		GiveTool(GamepassId, "Stroller")
+		local tool = plr.Backpack:WaitForChild("Stroller")
+		plr.Character.Humanoid:EquipTool(tool)
+		local weld = tool.Handle.Weld
+
+		RobloxianLife:SetLocalProperty(weld, "Parent", weld.Parent.Parent.Parent)
+		RobloxianLife:SetLocalProperty(tool, "Parent", game.Lighting)
+
+		instance = weld
+	elseif classname == "Sparkles" then
+		Effect("Sparkles")
+
+		instance = plr.Character.HumanoidRootPart:WaitForChild("Sparkles")
+	else
+		error(string.format("Unsupported classname (%s).", classname))
+		return
+	end
+
+	runService.Heartbeat:Wait()
+
+	for i, v in pairs(instance:GetChildren()) do
+		RobloxianLife:SetLocalProperty(v, "Parent", game.Lighting)
+	end
+
+	runService.Heartbeat:Wait()
+	local parent = workspace
+
+	for i, v in pairs(props) do
+		if tostring(i) == "Parent" then
+			parent = v
+		else
+			RobloxianLife:SetLocalProperty(instance, tostring(i), v)
+		end
+	end
+
+	runService.Heartbeat:Wait()
+
+	RobloxianLife:SetLocalProperty(instance, "Parent", parent)
+
+	return instance
+end
+
+return RobloxianLife
